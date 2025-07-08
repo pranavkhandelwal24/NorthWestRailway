@@ -15,7 +15,7 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
         String query = "SELECT * FROM register_entries";
 
@@ -82,7 +82,7 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
     if (superadminName == null && superadminUsername != null) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
             
             PreparedStatement stmt = conn.prepareStatement("SELECT name FROM superadmins WHERE username = ?");
             stmt.setString(1, superadminUsername);
@@ -119,7 +119,7 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
     // Load all other data in a single database connection
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+        conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
         
         // Load departments and department heads
         Statement deptStmt = conn.createStatement();

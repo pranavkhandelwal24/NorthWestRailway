@@ -37,7 +37,7 @@ public class DepartmentDeleteServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/register2", "root", "root");
+                    "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // === Start transaction ===
             conn.setAutoCommit(false);

@@ -11,7 +11,7 @@
     
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
         String sql = "SELECT * FROM admins WHERE id = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, id);
@@ -633,7 +633,7 @@
         <option value="">Select Department</option>
         <% 
             try {
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
                 
                 // First, get all departments with null department_head
                 String availableDeptsSql = "SELECT name FROM departments WHERE department_head IS NULL";

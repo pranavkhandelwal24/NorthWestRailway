@@ -27,7 +27,7 @@ public class EditEntryServlet extends HttpServlet {
         String dispatch_date = request.getParameter("dispatch_date");
         String status = request.getParameter("status");
 
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv")) {
             // Update the entry
             String sql = "UPDATE register_entries SET vetted_cost = ?, savings = ?, putup_date = ?, dispatch_date = ?, status = ? WHERE ifile_no = ?";
             

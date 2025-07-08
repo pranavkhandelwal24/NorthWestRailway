@@ -14,7 +14,7 @@ departmentName = departmentName.trim();
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
     Connection conn = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/register2", "root", "root");
+        "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
     String sql = "SELECT name FROM departments WHERE TRIM(name) = ?";
     PreparedStatement stmt = conn.prepareStatement(sql);
     stmt.setString(1, departmentName);

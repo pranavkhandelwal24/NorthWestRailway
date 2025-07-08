@@ -28,7 +28,7 @@ public class AdminDeleteServlet extends HttpServlet {
 
         try {
             conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/register2", "root", "root"
+                "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv"
             );
             conn.setAutoCommit(false); // ✅ Start transaction
 

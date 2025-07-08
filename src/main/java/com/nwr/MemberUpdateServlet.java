@@ -22,7 +22,7 @@ public class MemberUpdateServlet extends HttpServlet {
         String email = request.getParameter("email");
         String department = request.getParameter("department");
 
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv")) {
             // Check for duplicate username/email
             String checkSql = "SELECT id FROM members WHERE (username = ? OR email = ?) AND id != ?";
             try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
