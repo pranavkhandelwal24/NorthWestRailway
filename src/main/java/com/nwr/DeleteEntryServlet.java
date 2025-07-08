@@ -39,7 +39,9 @@ public class DeleteEntryServlet extends HttpServlet {
         try {
             int ifileNo = Integer.parseInt(ifile_no);
 
-            conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             String sql = "DELETE FROM register_entries WHERE ifile_no = ? AND username = ?";
             pstmt = conn.prepareStatement(sql);

@@ -25,7 +25,7 @@ public class MemberDeleteServlet extends HttpServlet {
             return;
         }
         
-        try (Connection conn = DAOConnection.getConnection()) {
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv")) {
             String sql = "UPDATE members SET status = 'inactive' WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, Integer.parseInt(id));

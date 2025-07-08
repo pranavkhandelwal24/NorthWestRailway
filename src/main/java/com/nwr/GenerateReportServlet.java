@@ -72,7 +72,8 @@ public class GenerateReportServlet extends HttpServlet {
             String endDate = refDateStr;
 
             // 4. Database Connection
-            conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // 5. Get Users in Department
             Map<String, Map<String, Integer>> userStats = new LinkedHashMap<>();

@@ -25,7 +25,8 @@ public class AddDepartmentServlet extends HttpServlet {
         }
 
         try {
-            Connection conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // Check if department already exists
             PreparedStatement check = conn.prepareStatement("SELECT * FROM departments WHERE name = ?");

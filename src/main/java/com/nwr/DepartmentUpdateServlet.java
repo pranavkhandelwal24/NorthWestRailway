@@ -39,7 +39,9 @@ public class DepartmentUpdateServlet extends HttpServlet {
         PreparedStatement getIdStmt = null;
 
         try {
-        	conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // 1. First get the department_id for the old name
             String getIdSql = "SELECT department_id FROM departments WHERE name = ?";

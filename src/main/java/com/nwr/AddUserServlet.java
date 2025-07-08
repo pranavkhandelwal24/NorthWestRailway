@@ -72,7 +72,8 @@ public class AddUserServlet extends HttpServlet {
                 return;
             }
 
-            conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // Check if username exists
             if (isValueExists(conn, "username", username)) {

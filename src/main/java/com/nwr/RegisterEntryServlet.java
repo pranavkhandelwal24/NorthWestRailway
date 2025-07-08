@@ -43,7 +43,8 @@ public class RegisterEntryServlet extends HttpServlet {
             int ifileNo = Integer.parseInt(ifileNoStr);
             int efileNo = Integer.parseInt(efileNoStr);
 
-            Connection conn = DAOConnection.getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
             // ✅ Check for duplicate file numbers
             String checkSql = "SELECT COUNT(*) FROM register_entries WHERE ifile_no = ? OR efile_no = ?";

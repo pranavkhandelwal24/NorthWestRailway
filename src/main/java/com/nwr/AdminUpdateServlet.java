@@ -24,8 +24,8 @@ public class AdminUpdateServlet extends HttpServlet {
 
         Connection conn = null;
         try {
-        	conn = DAOConnection.getConnection();
-// Start transaction
+            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+            // Start transaction
             conn.setAutoCommit(false);
             
             // Get current admin details
