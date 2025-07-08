@@ -27,9 +27,8 @@ public class AdminDeleteServlet extends HttpServlet {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection(
-                "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv"
-            );
+        	conn = DAOConnection.getConnection();
+
             conn.setAutoCommit(false); // ✅ Start transaction
 
             // 1️⃣ Get the admin's name

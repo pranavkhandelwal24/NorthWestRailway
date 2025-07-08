@@ -35,9 +35,7 @@ public class LoginServlet extends HttpServlet {
         ResultSet rs = null;
         
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection(
-                    "jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        	Connection conn = DAOConnection.getConnection();
 
             // Check user in all tables
             Object[] userData = authenticateUser(con, username);
@@ -86,8 +84,6 @@ public class LoginServlet extends HttpServlet {
             // Send success response
             sendSuccess(response, getRedirectUrl(role));
             
-        } catch (ClassNotFoundException e) {
-            sendError(response, "Database driver not found");
         } catch (SQLException e) {
             sendError(response, "Database error: " + e.getMessage());
         } catch (NoSuchAlgorithmException e) {

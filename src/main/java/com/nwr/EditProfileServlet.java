@@ -23,7 +23,7 @@ public class EditProfileServlet extends HttpServlet {
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
 
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/defaultdb?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv")) {
+        try (Connection conn = DAOConnection.getConnection()) {
 
             // ✅ Check duplicate username/email across ALL roles
             String[] tables = {"members", "admins", "superadmins"};

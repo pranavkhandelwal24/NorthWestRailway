@@ -71,8 +71,8 @@ public class GRAdminServlet extends HttpServlet {
             String endDate = refDateStr;
 
             // 4. Database Connection
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register2", "root", "root");
+            conn = DAOConnection.getConnection();
+
 
             // 5. Get Users in Department
             Map<String, Map<String, Integer>> userStats = new LinkedHashMap<>();
