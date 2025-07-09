@@ -30,7 +30,8 @@
     Connection adminConn = null;
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        adminConn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        adminConn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
         
         PreparedStatement adminStmt = adminConn.prepareStatement("SELECT department FROM admins WHERE username = ?");
         adminStmt.setString(1, adminUsername);
@@ -64,18 +65,18 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
         String query = "SELECT * FROM register_entries";
         if (searchFile != null && !searchFile.trim().isEmpty()) {
-            query += " AND ifile_no = ?";
+            query += " WHERE ifile_no = ?";
         }
 
         PreparedStatement ps = conn.prepareStatement(query);
         
         if (searchFile != null && !searchFile.trim().isEmpty()) {
             try {
-                ps.setInt(2, Integer.parseInt(searchFile.trim()));
+                ps.setInt(1, Integer.parseInt(searchFile.trim()));
             } catch (NumberFormatException e) {
                 // Handle error
             }
@@ -115,7 +116,7 @@
     Connection conn = null;
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
 
         PreparedStatement memberStmt = conn.prepareStatement("SELECT * FROM members WHERE department = ? AND status='active'");
         memberStmt.setString(1, adminDepartment);
@@ -496,15 +497,19 @@
                                 </span>
                             </td>
                             <td class="actions">
-                                <button class="btn-edit" onclick="location.href='edit-entry.jsp?ifile_no=<%= entry[0] %>'">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
+                                <button class="btn-edit" 
+        data-id="<%= entry[0] %>"
+        data-type="entry"
+        data-department="<%= entry[3] %>">
+    <i class="fas fa-edit"></i> Edit
+</button>
                                 <button type="button"
                                        class="btn-delete"
                                        data-id="<%= entry[0] %>"
                                        data-type="entry">
                                        <i class="fas fa-trash"></i> 
                                 </button>
+                                
                             </td>
                         </tr>
                         <% } 
@@ -560,6 +565,7 @@
     <div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; max-width: 450px; z-index: 10000; display: flex; flex-direction: column; gap: 15px;"></div>
     
     <script>
+    const adminDepartment = '<%= adminDepartment %>';
     const contextPath = '<%= request.getContextPath() %>';
 
     // Global variables for deletion
@@ -593,7 +599,7 @@
             servletPath = 'member-delete';
             break;
           case 'entry':
-            servletPath = 'entry-delete';
+            servletPath = 'delete-entry';
             break;
           default:
             showNotification('error', 'Invalid delete type');
@@ -602,8 +608,12 @@
 
         const url = contextPath + '/' + servletPath;
 
-        let bodyData = 'id=' + encodeURIComponent(currentDeleteId);
-
+        
+     // Change this line to use ifile_no for entries
+        let bodyData = currentDeleteType === 'entry' 
+          ? 'ifile_no=' + encodeURIComponent(currentDeleteId)
+          : 'id=' + encodeURIComponent(currentDeleteId);
+          
         fetch(url, {
           method: 'POST',
           headers: {
@@ -842,14 +852,34 @@
     });
     
     // Edit button functionality
-    document.addEventListener('click', function(e) {
+    /* document.addEventListener('click', function(e) {
         const editBtn = e.target.closest('.btn-edit');
         if (editBtn) {
             const userId = editBtn.getAttribute('data-id');
             const userType = editBtn.getAttribute('data-type');
             window.location.href = contextPath + '/edit-' + userType + '.jsp?id=' + userId;
         }
-    });
+    }); */
+    
+ // Edit button functionality
+    document.addEventListener('click', function(e) {
+    const editBtn = e.target.closest('.btn-edit');
+    if (editBtn) {
+        const id = editBtn.getAttribute('data-id');
+        const type = editBtn.getAttribute('data-type');
+        const entryDepartment = editBtn.getAttribute('data-department');
+        
+        if (type === 'entry') {
+            if (entryDepartment === adminDepartment) {
+                window.location.href = 'edit-entry.jsp?ifile_no=' + id;
+            } else {
+                showNotification('error', 'Access Denied: You can only edit entries from your own department (' + adminDepartment + ')');
+            }
+        } else if (type === 'member') {
+            window.location.href = 'edit-member.jsp?id=' + id;
+        }
+    }
+});
     
     // Initialize UI
     document.addEventListener('DOMContentLoaded', function() {

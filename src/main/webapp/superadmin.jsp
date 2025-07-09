@@ -15,7 +15,8 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
 
         String query = "SELECT * FROM register_entries";
 
@@ -82,8 +83,8 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
     if (superadminName == null && superadminUsername != null) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
-            
+            conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
             PreparedStatement stmt = conn.prepareStatement("SELECT name FROM superadmins WHERE username = ?");
             stmt.setString(1, superadminUsername);
             ResultSet rs = stmt.executeQuery();
@@ -119,8 +120,8 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
     // Load all other data in a single database connection
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
-        
+        conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
         // Load departments and department heads
         Statement deptStmt = conn.createStatement();
         ResultSet deptRs = deptStmt.executeQuery("SELECT name, department_head FROM departments");
@@ -734,9 +735,11 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
                         </span>
                     </td>
                     <td class="actions">
-                        <button class="btn-edit" onclick="location.href='edit-entry.jsp?ifile_no=<%= entry[0] %>'">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
+                        <button class="btn-edit" 
+						        data-id="<%= entry[0] %>" 
+						        data-type="entry">
+						    <i class="fas fa-edit"></i> Edit
+						</button>
                         <button type="button"
                                class="btn-delete"
                                data-id="<%= entry[0] %>"
@@ -833,37 +836,33 @@ if (session.getAttribute("username") == null || session.getAttribute("role") == 
 document.getElementById('confirmDelete').addEventListener('click', function() {
   if (currentDeleteId && currentDeleteType) {
     let servletPath = '';
+    let bodyData = '';
 
     switch (currentDeleteType) {
       case 'member':
         servletPath = 'member-delete';
+        bodyData = 'id=' + encodeURIComponent(currentDeleteId);
         break;
       case 'admin':
         servletPath = 'admin-delete';
+        bodyData = 'id=' + encodeURIComponent(currentDeleteId);
         break;
       case 'department':
         servletPath = 'department-delete';
+        bodyData = 'departmentName=' + encodeURIComponent(currentDeleteId);
+        break;
+      case 'entry':
+        servletPath = 'delete-entry';
+        bodyData = 'ifile_no=' + encodeURIComponent(currentDeleteId);  // KEY CHANGE HERE
         break;
       default:
         showNotification('error', 'Invalid delete type');
         return;
     }
 
-    const url = contextPath + '/' + servletPath;
-
-    // ✅ ✅ ✅ USE CORRECT PARAM NAME
-    let bodyData = '';
-    if (currentDeleteType === 'department') {
-      bodyData = 'departmentName=' + encodeURIComponent(currentDeleteId);
-    } else {
-      bodyData = 'id=' + encodeURIComponent(currentDeleteId);
-    }
-
-    fetch(url, {
+    fetch(contextPath + '/' + servletPath, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: bodyData
     })
     .then(res => res.json())
@@ -875,7 +874,7 @@ document.getElementById('confirmDelete').addEventListener('click', function() {
       }
     })
     .catch(err => {
-      showNotification('error', 'Fetch failed: ' + err);
+      showNotification('error', 'Failed to delete: ' + err);
     });
   }
 });
@@ -1226,15 +1225,18 @@ userTypeSelect.addEventListener('change', function() {
 });
     // Edit button functionality
     document.addEventListener('click', function(e) {
-        const editBtn = e.target.closest('.btn-edit');
-        if (editBtn) {
-            const userId = editBtn.getAttribute('data-id');
-            const userType = editBtn.getAttribute('data-type');
-            
-            // Redirect to edit page
-            window.location.href = contextPath + '/edit-' + userType + '.jsp?id=' + userId;
+    const editBtn = e.target.closest('.btn-edit');
+    if (editBtn) {
+        const id = editBtn.getAttribute('data-id');
+        const type = editBtn.getAttribute('data-type');
+        
+        if (type === 'entry') {
+            window.location.href = 'edit-entry.jsp?ifile_no=' + id;
+        } else {
+            window.location.href = contextPath + '/edit-' + type + '.jsp?id=' + id;
         }
-    });
+    }
+});
     
     
     // Initialize UI

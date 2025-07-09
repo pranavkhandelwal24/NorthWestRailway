@@ -1,35 +1,52 @@
 <%@ page import="java.sql.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    String id = request.getParameter("id");
-    String name = "";
-    String username = "";
-    String email = "";
-    String department = "";
-    String success = request.getParameter("success");
-    String error = request.getParameter("error");
+
+// Get user role from session
+String backUrl = "login.jsp"; // Default fallback
+String userRole = (String) session.getAttribute("role");
+if (userRole == null) {
+    response.sendRedirect("login.jsp");
+    return;
+}
+
+// Set appropriate back URL based on role
+if ("admin".equals(userRole)) {
+    backUrl = "admin.jsp";
+} else if ("superadmin".equals(userRole)) {
+    backUrl = "superadmin.jsp";
+}
+
+String id = request.getParameter("id");
+String name = "";
+String username = "";
+String email = "";
+String department = "";
+String success = request.getParameter("success");
+String error = request.getParameter("error");
+
+try {
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
+    String sql = "SELECT * FROM members WHERE id = ?";
+    PreparedStatement stmt = conn.prepareStatement(sql);
+    stmt.setString(1, id);
+    ResultSet rs = stmt.executeQuery();
     
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
-        String sql = "SELECT * FROM members WHERE id = ?";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, id);
-        ResultSet rs = stmt.executeQuery();
-        
-        if (rs.next()) {
-            name = rs.getString("name");
-            username = rs.getString("username");
-            email = rs.getString("email");
-            department = rs.getString("department");
-        }
-        
-        rs.close();
-        stmt.close();
-        conn.close();
-    } catch (Exception e) {
-        e.printStackTrace();
+    if (rs.next()) {
+        name = rs.getString("name");
+        username = rs.getString("username");
+        email = rs.getString("email");
+        department = rs.getString("department");
     }
+    
+    rs.close();
+    stmt.close();
+    conn.close();
+} catch (Exception e) {
+    e.printStackTrace();
+}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -603,7 +620,7 @@
         <div class="edit-form-container">
             <div class="form-header">
                 <h3 class="form-title">Edit Member Information</h3>
-                <button class="back-button" onclick="window.location.href='superadmin.jsp'">
+                <button class="back-button" onclick="window.location.href='<%= backUrl %>'">
                     <i class="fas fa-arrow-left"></i> Back to Dashboard
                 </button>
             </div>
@@ -629,26 +646,33 @@
                     
                     <div class="form-group">
                         <label class="form-label">Department</label>
-                        <select name="department" class="form-control" required>
-                            <option value="">Select Department</option>
-                            <% 
-                                try {
-                                    Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
-                                    Statement stmt = conn.createStatement();
-                                    ResultSet rs = stmt.executeQuery("SELECT name FROM departments");
-                                    while (rs.next()) {
-                                        String dept = rs.getString("name");
-                                        String selected = dept.equals(department) ? "selected" : "";
-                                        out.println("<option value='" + dept + "' " + selected + ">" + dept + "</option>");
+                        <% if ("superadmin".equals(userRole)) { %>
+                            <!-- Superadmin sees normal select -->
+                            <select name="department" class="form-control" required>
+                                <option value="">Select Department</option>
+                                <% 
+                                    try {
+                                        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/register", "root", "mkm005");
+                                        Statement stmt = conn.createStatement();
+                                        ResultSet rs = stmt.executeQuery("SELECT name FROM departments");
+                                        while (rs.next()) {
+                                            String dept = rs.getString("name");
+                                            String selected = dept.equals(department) ? "selected" : "";
+                                            out.println("<option value='" + dept + "' " + selected + ">" + dept + "</option>");
+                                        }
+                                        rs.close();
+                                        stmt.close();
+                                        conn.close();
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
                                     }
-                                    rs.close();
-                                    stmt.close();
-                                    conn.close();
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                            %>
-                        </select>
+                                %>
+                            </select>
+                        <% } else { %>
+                            <!-- Admin sees disabled field showing their department -->
+                            <input type="text" class="form-control" value="<%= department %>" disabled>
+                            <input type="hidden" name="department" value="<%= department %>">
+                        <% } %>
                     </div>
                 </div>
                 

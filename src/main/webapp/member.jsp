@@ -20,7 +20,8 @@ String username     = (String) session.getAttribute("username");
 String department = "";
 try {
  Class.forName("com.mysql.cj.jdbc.Driver");
- Connection deptConn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+ Connection deptConn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
  PreparedStatement deptPs = deptConn.prepareStatement("SELECT department FROM members WHERE username = ?");
  deptPs.setString(1, username);
  ResultSet deptRs = deptPs.executeQuery();
@@ -50,7 +51,8 @@ try {
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
 
         String query = "SELECT * FROM register_entries WHERE department = ?";
 
@@ -376,9 +378,11 @@ try {
                 </span>
             </td>
             <td class="actions">
-                <button class="btn-edit" onclick="location.href='edit-entry.jsp?ifile_no=<%= entry[0] %>'">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
+                <button class="btn-edit" 
+            data-id="<%= entry[0] %>"
+            data-username="<%= entry[2] %>">
+        <i class="fas fa-edit"></i> Edit
+    </button>
                 <button type="button"
                        class="btn-delete"
                        data-id="<%= entry[0] %>"
@@ -397,7 +401,7 @@ try {
             
             <div style="margin-top: 50px;"></div>
             <div class="section-header">
-              <h3 class="section-subtitle">Generate Reports]</h3>
+              <h3 class="section-subtitle">Generate Reports</h3>
             </div>
 
             <!-- Date Input Section -->
@@ -445,6 +449,22 @@ try {
     <div id="notificationContainer" style="position: fixed; top: 20px; right: 20px; max-width: 450px; z-index: 10000; display: flex; flex-direction: column; gap: 15px;"></div>
     
     <script>
+ // Get current username from JSP
+    const currentUsername = '<%= username %>';
+ // Edit button functionality
+    document.addEventListener('click', function(e) {
+        const editBtn = e.target.closest('.btn-edit');
+        if (editBtn) {
+            const entryId = editBtn.getAttribute('data-id');
+            const entryUsername = editBtn.getAttribute('data-username');
+            
+            if (entryUsername === currentUsername) {
+                window.location.href = 'edit-entry.jsp?ifile_no=' + entryId;
+            } else {
+                showNotification('error', 'You can only edit your own entries');
+            }
+        }
+    });
 		document.addEventListener('DOMContentLoaded', function() {
 		
 		  const contextPath = '<%= request.getContextPath() %>';

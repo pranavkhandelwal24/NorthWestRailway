@@ -210,7 +210,7 @@
             position: relative;
             z-index: 2;
             transform-style: preserve-3d;
-            
+            animation: float 6s ease-in-out infinite;
             border: 1px solid rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             overflow: hidden;

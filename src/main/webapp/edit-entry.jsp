@@ -20,7 +20,8 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://pranavkhandelwal24-nwrregister.i.aivencloud.com:12438/nwrregister?useSSL=true&requireSSL=true&serverTimezone=UTC?useSSL=true&requireSSL=true&serverTimezone=UTC","avnadmin","AVNS_Adj10hYW-Y7UfsohGWv");
+
         
         // Get the current entry details
         String sql = "SELECT proposed_cost, vetted_cost, savings, putup_date, dispatch_date, status FROM register_entries WHERE ifile_no = ?";
@@ -139,7 +140,7 @@
                         <select name="status" class="form-control">
                         	<option value="">-- Select --</option>
                             <option value="V" <%= "V".equals(status) ? "selected" : "" %>>V (Verified)</option>
-                            <option value="R" <%= "R".equals(status) ? "selected" : "" %>>R (Rejected)</option>
+                            <option value="R" <%= "R".equals(status) ? "selected" : "" %>>R (Returned)</option>
                         </select>
                     </div>
                 </div>
@@ -153,7 +154,7 @@
 
     <!-- Footer -->
     <div class="footer">
-        <p>© 2023 North Western Railway. All rights reserved.</p>
+        <p>© 2025 North Western Railway. All rights reserved.</p>
         <p>Railway Management System | <%= userrole %> Dashboard</p>
         <p>Designed with <i class="fas fa-heart" style="color: #e63946;"></i> for efficient railway administration</p>
     </div>
@@ -196,3 +197,4 @@
     </script>
 </body>
 </html>
+
